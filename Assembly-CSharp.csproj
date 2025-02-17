@@ -59,17 +59,20 @@
     <UnityVersion>2022.3.28f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="C:\Users\Cal\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.1.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.28f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.28f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Controller\Scripts\PhysicsSimulator.cs" />
+    <Compile Include="Assets\Controller\Scripts\Damage.cs" />
     <Compile Include="Assets\Controller\Scripts\PlayerInput.cs" />
     <Compile Include="Assets\Controller\Scripts\PlayerStats.cs" />
     <Compile Include="Assets\Controller\Input\PlayerInputActions.cs" />
+    <Compile Include="Assets\Controller\Scripts\Bolt.cs" />
+    <Compile Include="Assets\Controller\Scripts\ProjectileSpawner.cs" />
     <Compile Include="Assets\Controller\Scripts\PlayerController.cs" />
-    <Compile Include="Assets\PlayerHealth.cs" />
-    <Compile Include="Assets\Damage.cs" />
+    <Compile Include="Assets\Controller\Scripts\PlayerHealth.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
