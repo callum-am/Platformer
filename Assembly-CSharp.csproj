@@ -70,6 +70,7 @@
     <Compile Include="Assets\Controller\Scripts\PlayerStats.cs" />
     <Compile Include="Assets\Controller\Input\PlayerInputActions.cs" />
     <Compile Include="Assets\Controller\Scripts\Bolt.cs" />
+    <Compile Include="Assets\Controller\Scripts\PlayerAbilities.cs" />
     <Compile Include="Assets\Controller\Scripts\ProjectileSpawner.cs" />
     <Compile Include="Assets\Controller\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Controller\Scripts\PlayerHealth.cs" />

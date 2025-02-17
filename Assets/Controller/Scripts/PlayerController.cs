@@ -372,6 +372,11 @@ namespace PlayerController
             _frameDirection = _frameDirection.normalized;
         }
 
+        private void CalculateAim()
+        {
+            
+        }
+
         #endregion
 
         #region Walls

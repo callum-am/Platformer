@@ -75,6 +75,20 @@ namespace PlayerController
         public float LadderSlideSpeed = 12;
         public float LadderShimmySpeedMultiplier = 0.5f;
 
+        // Combat & Progression Statistics
+        
+        [Header("Progression"), Space]
+        public float currentExperience = 0f;
+        public float totalExperience = 0f;
+    
+
+        // Abilities
+
+        [Header("Abilities"), Space]
+        public float basicAttackVariant = 0f;
+        public float offensiveAbilityVariant = 0f;
+        public float utilityAbilityVariant = 0f; 
+
         // Moving Platforms
         [Header("Moving Platforms"), Space] public float NegativeYVelocityNegation = 0.2f;
         public float ExternalVelocityDecayRate = 0.1f;
@@ -166,6 +180,9 @@ namespace PlayerController
         }
     }
 
+    [Serializable]
+
+
     public struct GeneratedCharacterSize
     {
         // Standing
@@ -181,6 +198,8 @@ namespace PlayerController
         public float CrouchingHeight;
         public Vector2 CrouchingColliderCenter;
     }
+
+
     
     [Serializable]
     public enum PositionCorrectionMode

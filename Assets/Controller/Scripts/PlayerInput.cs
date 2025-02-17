@@ -7,7 +7,7 @@ namespace PlayerController
     public class PlayerInput : MonoBehaviour
     {
         private PlayerInputActions _actions;
-        private InputAction _move, _jump, _dash;
+        private InputAction _move, _jump, _dash, _attack, _ability, _utility;
 
         private void Awake()
         {
@@ -15,6 +15,9 @@ namespace PlayerController
             _move = _actions.Player.Move;
             _jump = _actions.Player.Jump;
             _dash = _actions.Player.Dash;
+            _attack = _actions.Player.Attack;
+            _ability = _actions.Player.Ability;
+            _utility = _actions.Player.Utility;
         }
 
         private void OnEnable() => _actions.Enable();
@@ -28,6 +31,10 @@ namespace PlayerController
                 JumpDown = _jump.WasPressedThisFrame(),
                 JumpHeld = _jump.IsPressed(),
                 DashDown = _dash.WasPressedThisFrame(),
+                AttackDown = _attack.WasPressedThisFrame(),
+                AbilityDown = _ability.WasPressedThisFrame(),
+                UtilityDown = _utility.WasPressedThisFrame(),
+                Mouse = Mouse.current.position.ReadValue(),
                 Move = _move.ReadValue<Vector2>()
             };
         }
@@ -36,8 +43,12 @@ namespace PlayerController
     public struct FrameInput
     {
         public Vector2 Move;
+        public Vector2 Mouse;
         public bool JumpDown;
         public bool JumpHeld;
         public bool DashDown;
+        public bool AttackDown;
+        public bool AbilityDown;
+        public bool UtilityDown;
     }
 }
