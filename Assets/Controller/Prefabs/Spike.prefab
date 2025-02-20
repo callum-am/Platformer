@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1638183817763308012}
   - component: {fileID: 6532166444843580068}
   - component: {fileID: 517380759164462631}
-  - component: {fileID: 5045035795631404717}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Untagged
@@ -145,20 +144,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
---- !u!114 &5045035795631404717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 102822014257745039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d48827c6051c05240b7105e5986dab3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 0}
-  projectileSpeed: 5
-  projectileLifetime: 2
-  spawnerType: 0
-  spawnRate: 0.1

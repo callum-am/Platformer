@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace PlayerController
 {
@@ -110,7 +111,7 @@ namespace PlayerController
 
             CalculateCollisions();
             CalculateDirection();
-
+            CalculateAim();
             CalculateWalls();
             CalculateLadders();
             CalculateJump();
@@ -120,6 +121,9 @@ namespace PlayerController
 
             TraceGround();
             Move();
+            Attack();
+            Ability();
+            Utility();
 
             CalculateCrouch();
 
@@ -374,7 +378,7 @@ namespace PlayerController
 
         private void CalculateAim()
         {
-            
+            Vector2 aimDir = _frameInput.Mouse - (Vector2)transform.position;
         }
 
         #endregion
@@ -880,6 +884,72 @@ namespace PlayerController
                 Grounded = _grounded
             };
         }
+        
+        #region Ability Usage
+
+        public void Attack()
+        {
+            if (_frameInput.AttackDown)
+            {
+                switch(Stats.basicAttackVariant)
+                {
+                    default:
+                        
+                        break;
+                    case 1:
+                        
+                        break;
+                    case 2:
+                        
+                        break;
+                    case 3:
+                        
+                        break;
+                }
+            }
+        }
+
+        public void Ability()
+        {
+            if (_frameInput.AbilityDown)
+            {
+                switch(Stats.offensiveAbilityVariant)
+                {
+                    default:
+                        
+                        break;
+                    case 1:
+                        
+                        break;
+                    case 2:
+                        
+                        break;
+                }
+            }
+        }
+
+        
+        
+        public void Utility()
+        {
+            if (_frameInput.UtilityDown)
+            {
+                switch(Stats.utilityAbilityVariant)
+                {
+                    default:
+                        
+                        break;
+                    case 1:
+                        
+                        break;
+                    case 2:
+                        
+                        break;
+                }
+            }
+        }
+
+        #endregion
 
         #region External Triggers
 

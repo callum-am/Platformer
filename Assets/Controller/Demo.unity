@@ -867,16 +867,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Spike
       objectReference: {fileID: 0}
-    - target: {fileID: 5045035795631404717, guid: ada86414567f87b4e8f559c0be7a2df5, type: 3}
-      propertyPath: spawnerType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5045035795631404717, guid: ada86414567f87b4e8f559c0be7a2df5, type: 3}
-      propertyPath: projectilePrefab
-      value: 
-      objectReference: {fileID: 8381836884540559554, guid: d86611d05cd08fe4485744f1380e74f1, type: 3}
     m_RemovedComponents:
-    - {fileID: 5045035795631404717, guid: ada86414567f87b4e8f559c0be7a2df5, type: 3}
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
