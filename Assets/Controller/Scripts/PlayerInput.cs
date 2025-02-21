@@ -34,7 +34,7 @@ namespace PlayerController
                 AttackDown = _attack.IsPressed(),
                 AbilityDown = _ability.IsPressed(),
                 UtilityDown = _utility.IsPressed(),
-                Mouse = Mouse.current.position.ReadValue(),
+                Mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition),
                 Move = _move.ReadValue<Vector2>()
             };
         }

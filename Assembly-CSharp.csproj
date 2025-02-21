@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Assets\Controller\Scripts\PhysicsSimulator.cs" />
     <Compile Include="Assets\Controller\Scripts\Damage.cs" />
+    <Compile Include="Assets\Controller\Scripts\LightBall.cs" />
     <Compile Include="Assets\Controller\Scripts\PlayerInput.cs" />
     <Compile Include="Assets\Controller\Scripts\PlayerStats.cs" />
     <Compile Include="Assets\Controller\Input\PlayerInputActions.cs" />

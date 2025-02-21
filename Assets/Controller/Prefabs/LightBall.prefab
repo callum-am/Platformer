@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7051023684901536439}
   - component: {fileID: 525073747128000035}
-  - component: {fileID: 7252375621382210562}
+  - component: {fileID: 8588491938758631011}
   - component: {fileID: 2013749107928138878}
+  - component: {fileID: 2310264962949276662}
   m_Layer: 10
   m_Name: LightBall
   m_TagString: Untagged
@@ -86,7 +87,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7252375621382210562
+--- !u!114 &8588491938758631011
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,12 +96,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 8741734786600544223}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e471f0f5b9e82e4fb711c5e8bf19858, type: 3}
+  m_Script: {fileID: 11500000, guid: e57380e802793ac41b56974e62df5515, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
   rotation: 0
   despawnTime: 0
+  rb: {fileID: 2310264962949276662}
+  bouncy: {fileID: 6200000, guid: 340a9d5c24fa91941b2f51aa3e2fbd47, type: 2}
+  straight: {fileID: 6200000, guid: a5919a3ab18976d44bbf03f3dbdd85a6, type: 2}
 --- !u!58 &2013749107928138878
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -136,3 +140,30 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.49999997
+--- !u!50 &2310264962949276662
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8741734786600544223}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 6200000, guid: 340a9d5c24fa91941b2f51aa3e2fbd47, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

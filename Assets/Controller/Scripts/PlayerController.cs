@@ -42,8 +42,10 @@ namespace PlayerController
         public bool ClimbingLadder { get; private set; }
         [SerializeField]public GameObject AttackProjectile;
         private GameObject SpawnedAttack;
-
         private float fireRate = 0.5f;  // Default fire rate (for the default attack)
+        private Vector3 lookDirection;
+        private float lookAngle;
+        public Transform firePoint;
 
         public void AddFrameForce(Vector2 force, bool resetVelocity = false)
         {
@@ -118,7 +120,6 @@ namespace PlayerController
             CalculateCollisions();
             CalculateDirection();
             CalculateAim();
-            DebugAim(_frameInput.Mouse);
             CalculateWalls();
             CalculateLadders();
             CalculateJump();
@@ -383,12 +384,11 @@ namespace PlayerController
             _frameDirection = _frameDirection.normalized;
         }
 
-        private Quaternion CalculateAim()
+        private void CalculateAim()
         {
-            Vector3 mousePos = (Vector3)_frameInput.Mouse;
-            Vector2 aimDirection = (mousePos - transform.position).normalized;
-            float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-            return Quaternion.Euler(0, 0, angle);
+            lookDirection = (Vector3)_frameInput.Mouse - new Vector3(transform.position.x, transform.position.y);
+            lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+            firePoint.rotation = Quaternion.Euler(0, 0, lookAngle);
         }
 
         #endregion
@@ -901,15 +901,16 @@ namespace PlayerController
         {
             if (AttackProjectile)
             {
-                SpawnedAttack = Instantiate(AttackProjectile, transform.position, CalculateAim());
-                
-                // Assuming Bolt has speed and damage properties
-                var bolt = SpawnedAttack.GetComponent<Bolt>();
-                bolt.speed = speed;  // Set the speed based on the attack variant
-                bolt.despawnTime = lifetime;  // Set the lifetime of the projectile
-                
+                SpawnedAttack = Instantiate(AttackProjectile, transform.position, Quaternion.Euler(0, 0, lookAngle));
+                SpawnedAttack.transform.position = firePoint.position;
+
+                var LightBall = SpawnedAttack.GetComponent<LightBall>();
+                LightBall.speed = speed;  // Set the speed based on the attack variant
+                LightBall.despawnTime = lifetime;  // Set the lifetime of the projectile
+                LightBall.rb.AddForce(firePoint.right);  // Set the force of the projectile
                 // Set rotation (aim) of the projectile
-                SpawnedAttack.transform.rotation = CalculateAim();
+                SpawnedAttack.transform.rotation = firePoint.rotation;
+                
             }
         }
         private void DebugAim(Vector3 mousePosition)
@@ -930,7 +931,7 @@ namespace PlayerController
                         // Check if enough time has passed based on fireRate
                         if (Time.time > fireRate)
                         {
-                            SpawnProjectile(1.0f, 3.0f);
+                            SpawnProjectile(10.0f, 8.0f);
                             // Set the fireRate to a new time (cooldown period)
                             fireRate = Time.time + 0.5f;
                             Debug.Log("Loop");
