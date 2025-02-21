@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -38,6 +40,10 @@ namespace PlayerController
         public Vector2 Velocity { get; private set; }
         public int WallDirection { get; private set; }
         public bool ClimbingLadder { get; private set; }
+        [SerializeField]public GameObject AttackProjectile;
+        private GameObject SpawnedAttack;
+
+        private float fireRate = 0.5f;  // Default fire rate (for the default attack)
 
         public void AddFrameForce(Vector2 force, bool resetVelocity = false)
         {
@@ -112,6 +118,7 @@ namespace PlayerController
             CalculateCollisions();
             CalculateDirection();
             CalculateAim();
+            DebugAim(_frameInput.Mouse);
             CalculateWalls();
             CalculateLadders();
             CalculateJump();
@@ -376,9 +383,12 @@ namespace PlayerController
             _frameDirection = _frameDirection.normalized;
         }
 
-        private void CalculateAim()
+        private Quaternion CalculateAim()
         {
-            Vector2 aimDir = _frameInput.Mouse - (Vector2)transform.position;
+            Vector3 mousePos = (Vector3)_frameInput.Mouse;
+            Vector2 aimDirection = (mousePos - transform.position).normalized;
+            float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+            return Quaternion.Euler(0, 0, angle);
         }
 
         #endregion
@@ -887,23 +897,56 @@ namespace PlayerController
         
         #region Ability Usage
 
+        private void SpawnProjectile(float speed, float lifetime)
+        {
+            if (AttackProjectile)
+            {
+                SpawnedAttack = Instantiate(AttackProjectile, transform.position, CalculateAim());
+                
+                // Assuming Bolt has speed and damage properties
+                var bolt = SpawnedAttack.GetComponent<Bolt>();
+                bolt.speed = speed;  // Set the speed based on the attack variant
+                bolt.despawnTime = lifetime;  // Set the lifetime of the projectile
+                
+                // Set rotation (aim) of the projectile
+                SpawnedAttack.transform.rotation = CalculateAim();
+            }
+        }
+        private void DebugAim(Vector3 mousePosition)
+        {
+            Debug.DrawLine(transform.position, mousePosition, Color.red);  // Visualize the aim direction
+        }
         public void Attack()
         {
             if (_frameInput.AttackDown)
             {
+                Debug.Log("Attack");
+
                 switch(Stats.basicAttackVariant)
                 {
                     default:
-                        
+                        Debug.Log("Default");
+
+                        // Check if enough time has passed based on fireRate
+                        if (Time.time > fireRate)
+                        {
+                            SpawnProjectile(1.0f, 3.0f);
+                            // Set the fireRate to a new time (cooldown period)
+                            fireRate = Time.time + 0.5f;
+                            Debug.Log("Loop");
+                        }
                         break;
+
                     case 1:
-                        
+                        // Handle other attack variants here...
                         break;
+
                     case 2:
-                        
+                        // Handle other attack variants here...
                         break;
+
                     case 3:
-                        
+                        // Handle other attack variants here...
                         break;
                 }
             }
@@ -928,7 +971,7 @@ namespace PlayerController
             }
         }
 
-        
+
         
         public void Utility()
         {
@@ -1051,6 +1094,8 @@ namespace PlayerController
         public void LoadState(ControllerState state);
         public void RepositionImmediately(Vector2 position, bool resetVelocity = false);
         public void TogglePlayer(bool on);
+
+
     }
 
     public interface ISpeedModifier

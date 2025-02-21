@@ -179,6 +179,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3233281783062834105, guid: f0aea82a32c44de40afda65c4ccc1668, type: 3}
+      propertyPath: LightBall
+      value: 
+      objectReference: {fileID: 8741734786600544223, guid: 07645c4b9d4e1e74994beb3410f97653, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

@@ -31,9 +31,9 @@ namespace PlayerController
                 JumpDown = _jump.WasPressedThisFrame(),
                 JumpHeld = _jump.IsPressed(),
                 DashDown = _dash.WasPressedThisFrame(),
-                AttackDown = _attack.WasPressedThisFrame(),
-                AbilityDown = _ability.WasPressedThisFrame(),
-                UtilityDown = _utility.WasPressedThisFrame(),
+                AttackDown = _attack.IsPressed(),
+                AbilityDown = _ability.IsPressed(),
+                UtilityDown = _utility.IsPressed(),
                 Mouse = Mouse.current.position.ReadValue(),
                 Move = _move.ReadValue<Vector2>()
             };

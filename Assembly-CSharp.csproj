@@ -74,6 +74,7 @@
     <Compile Include="Assets\Controller\Scripts\ProjectileSpawner.cs" />
     <Compile Include="Assets\Controller\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Controller\Scripts\PlayerHealth.cs" />
+    <Compile Include="Assets\Controller\Scripts\IgnoreCollisions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
