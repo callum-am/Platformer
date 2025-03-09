@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -46,6 +48,9 @@ namespace PlayerController
         private Vector3 lookDirection;
         private float lookAngle;
         public Transform firePoint;
+        private float defaultDistanceRay = 100;
+        public LineRenderer lineRenderer;
+        public float abilityCooldown = 20f;
 
         public void AddFrameForce(Vector2 force, bool resetVelocity = false)
         {
@@ -124,6 +129,8 @@ namespace PlayerController
             CalculateLadders();
             CalculateJump();
             CalculateDash();
+
+            FaceDirection();
 
             CalculateExternalModifiers();
 
@@ -382,6 +389,19 @@ namespace PlayerController
             }
 
             _frameDirection = _frameDirection.normalized;
+
+        }
+
+        private void FaceDirection()
+        {
+            if (_frameDirection.x > 0)
+            {
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+            else if (_frameDirection.x < 0)
+            {
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
         }
 
         private void CalculateAim()
@@ -897,7 +917,7 @@ namespace PlayerController
         
         #region Ability Usage
 
-        private void SpawnProjectile(float speed, float lifetime)
+        private void SpawnProjectile(float speed, float lifetime, float projectileType)
         {
             if (AttackProjectile)
             {
@@ -905,6 +925,14 @@ namespace PlayerController
                 SpawnedAttack.transform.position = firePoint.position;
 
                 var LightBall = SpawnedAttack.GetComponent<LightBall>();
+                var rb = SpawnedAttack.GetComponent<Rigidbody2D>();
+                if (projectileType == 0)
+                {
+                    rb.sharedMaterial = LightBall.straight;
+                } else if (projectileType == 1)
+                {
+                    rb.sharedMaterial = LightBall.bouncy;
+                }
                 LightBall.speed = speed;  // Set the speed based on the attack variant
                 LightBall.despawnTime = lifetime;  // Set the lifetime of the projectile
                 LightBall.rb.AddForce(firePoint.right);  // Set the force of the projectile
@@ -912,6 +940,93 @@ namespace PlayerController
                 SpawnedAttack.transform.rotation = firePoint.rotation;
                 
             }
+        }
+
+        private void SpawnProjectilesInAllDirections(float speed, float lifetime, float projectileType, int numProjectiles)
+        {
+            if (AttackProjectile)
+            {
+                float angleStep = 360f / numProjectiles;
+                for (int i = 0; i < numProjectiles; i++)
+                {
+                    float angle = i * angleStep;
+                    Quaternion rotation = Quaternion.Euler(0, 0, angle);
+            
+                    GameObject SpawnedAttack = Instantiate(AttackProjectile, transform.position, rotation);
+                    SpawnedAttack.transform.position = firePoint.position;
+
+                    var LightBall = SpawnedAttack.GetComponent<LightBall>();
+                    var rb = SpawnedAttack.GetComponent<Rigidbody2D>();
+                    
+                    if (projectileType == 0)
+                    {
+                        rb.sharedMaterial = LightBall.straight;
+                    }
+                    else if (projectileType == 1)
+                    {
+                        rb.sharedMaterial = LightBall.bouncy;
+                    }
+                    
+                    LightBall.speed = speed;
+                    LightBall.despawnTime = lifetime;
+                    rb.velocity = rotation * Vector2.right * speed; // Shoots outward in the given direction
+                }
+            }
+        }
+
+        private void ShootBeam()
+        {
+            int layerMask = ~LayerMask.GetMask("Player");
+
+            RaycastHit2D hit = Physics2D.Raycast(firePoint.position, firePoint.right, defaultDistanceRay, layerMask);
+
+            if (hit.collider != null)
+            {
+                Debug.Log("Hit");
+                Draw2DRay(firePoint.position, hit.point);
+                // Check what layer the hit object is on
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                {
+                    Debug.Log("Hit an enemy!");
+                }
+                else
+                {
+                    Debug.Log("Hit something else.");
+                }
+            } else {
+                Draw2DRay(firePoint.position, firePoint.position + firePoint.right * defaultDistanceRay);
+            }
+
+            StartCoroutine(DisableLineAfterTime(0.5f));
+
+        }
+
+        private void Draw2DRay(Vector2 start, Vector2 end)
+        {
+            lineRenderer.enabled = true;
+            lineRenderer.SetPosition(0, start);
+            lineRenderer.SetPosition(1, end);
+        }
+
+        private IEnumerator DisableLineAfterTime(float duration)
+        {
+            float elapsedTime = 0f;
+            Material lineMaterial = lineRenderer.material; 
+            Color initialColor = lineMaterial.GetColor("_EmissionColor"); 
+            float initialIntensity = initialColor.maxColorComponent;  
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float fadeFactor = Mathf.Lerp(initialIntensity, 0f, elapsedTime / duration);  
+                Color newColor = initialColor * fadeFactor; 
+
+                lineMaterial.SetColor("_EmissionColor", newColor);  
+                yield return null;  
+            }
+
+            lineMaterial.SetColor("_EmissionColor", Color.black);  
+            lineRenderer.enabled = false;  
         }
         private void DebugAim(Vector3 mousePosition)
         {
@@ -931,7 +1046,7 @@ namespace PlayerController
                         // Check if enough time has passed based on fireRate
                         if (Time.time > fireRate)
                         {
-                            SpawnProjectile(10.0f, 8.0f);
+                            SpawnProjectile(10.0f, 8.0f, 0.0f);
                             // Set the fireRate to a new time (cooldown period)
                             fireRate = Time.time + 0.5f;
                             Debug.Log("Loop");
@@ -939,11 +1054,21 @@ namespace PlayerController
                         break;
 
                     case 1:
-                        // Handle other attack variants here...
+                        if (Time.time > fireRate)
+                        {
+                            SpawnProjectile(15.0f, 8.0f, 1.0f);
+                            // Set the fireRate to a new time (cooldown period)
+                            fireRate = Time.time + 0.5f;
+                            Debug.Log("Loop");
+                        }
                         break;
 
                     case 2:
-                        // Handle other attack variants here...
+                        if (Time.time > fireRate)
+                        {
+                            SpawnProjectilesInAllDirections(10.0f, 8.0f, 0.0f, 8); // 8 projectiles in all directions
+                            fireRate = Time.time + 0.5f;
+                        }
                         break;
 
                     case 3:
@@ -963,7 +1088,11 @@ namespace PlayerController
                         
                         break;
                     case 1:
-                        
+                        if (Time.time > abilityCooldown || abilityCooldown == 20f)
+                        {
+                        ShootBeam();
+                        abilityCooldown = Time.time + 20f;
+                        }
                         break;
                     case 2:
                         

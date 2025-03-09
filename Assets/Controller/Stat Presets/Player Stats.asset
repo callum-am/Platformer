@@ -73,5 +73,10 @@ MonoBehaviour:
   LadderClimbSpeed: 8
   LadderSlideSpeed: 12
   LadderShimmySpeedMultiplier: 0.1
+  currentExperience: 0
+  totalExperience: 0
+  basicAttackVariant: 0
+  offensiveAbilityVariant: 1
+  utilityAbilityVariant: 0
   NegativeYVelocityNegation: 0.2
   ExternalVelocityDecayRate: 0.5

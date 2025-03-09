@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Callbacks;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class LightBall : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class LightBall : MonoBehaviour
     public Rigidbody2D rb;
     public PhysicsMaterial2D bouncy;
     public PhysicsMaterial2D straight;
+    private float counter = 0;
 
 
     // Start is called before the first frame update
@@ -32,6 +34,29 @@ public class LightBall : MonoBehaviour
             Destroy(this.gameObject);
         }
         timer += Time.deltaTime;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Collision");
+        if (collision.gameObject.tag == "SolidTerrain")
+        {
+            if (rb.sharedMaterial == bouncy)
+            {
+                if (counter < 1)
+                {
+                    counter++;
+                }
+                else
+                {
+                    Destroy(this.gameObject);
+                }
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
+        }   
     }
 
     
