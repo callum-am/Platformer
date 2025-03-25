@@ -52,9 +52,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Stats>k__BackingField: {fileID: 11400000, guid: 894dfe33661263b42a8e1490d64c0424, type: 2}
   AttackProjectile: {fileID: 8741734786600544223, guid: 07645c4b9d4e1e74994beb3410f97653, type: 3}
+  lookDirection: {x: 0, y: 0, z: 0}
   firePoint: {fileID: 0}
   lineRenderer: {fileID: 0}
   abilityCooldown: 20
+  utilityCooldown: 5
+  pulseDuration: 2
+  pulseRadius: 5
+  pulseMaterial: {fileID: 0}
+  teleportRange: 10
+  animator: {fileID: 0}
   _drawGizmos: 1
 --- !u!50 &3295483688168138220
 Rigidbody2D:
@@ -160,8 +167,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.68}
-  m_Size: {x: 0.85999995, y: 1.32}
+  m_Offset: {x: 0, y: 0.63}
+  m_Size: {x: 0.43, y: 1.22}
   m_Direction: 0
 --- !u!114 &156251853918734602
 MonoBehaviour:

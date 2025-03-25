@@ -19,8 +19,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 769
   CharacterSize:
-    Height: 1.36
-    Width: 0.9
+    Height: 1.26
+    Width: 0.47
     StepHeight: 0.6
     CrouchHeight: 0.8
     RayInset: 0.1
@@ -44,7 +44,7 @@ MonoBehaviour:
   DashDuration: 0.1
   DashCooldown: 0.5
   DashEndHorizontalMultiplier: 0.5
-  AllowCrouching: 1
+  AllowCrouching: 0
   CrouchSlowDownTime: 1
   CrouchSpeedModifier: 0.3
   AllowWalls: 1
@@ -75,8 +75,19 @@ MonoBehaviour:
   LadderShimmySpeedMultiplier: 0.1
   currentExperience: 0
   totalExperience: 0
+  beamUnlocked: 0
+  sphereUnlocked: 0
+  teleportUnlocked: 0
+  shieldUnlocked: 0
+  ricochetUnlocked: 1
+  burstUnlocked: 1
+  healthUpgrade1Unlocked: 0
+  healthUpgrade2Unlocked: 0
+  speedUpgradeUnlocked: 0
+  dashUpgradeUnlocked: 0
+  spentPoints: 0
   basicAttackVariant: 0
-  offensiveAbilityVariant: 1
+  offensiveAbilityVariant: 0
   utilityAbilityVariant: 0
   NegativeYVelocityNegation: 0.2
   ExternalVelocityDecayRate: 0.5

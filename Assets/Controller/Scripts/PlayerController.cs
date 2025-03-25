@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+using Microsoft.Unity.VisualStudio.Editor;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -45,12 +46,19 @@ namespace PlayerController
         [SerializeField]public GameObject AttackProjectile;
         private GameObject SpawnedAttack;
         private float fireRate = 0.5f;  // Default fire rate (for the default attack)
-        private Vector3 lookDirection;
+        [HideInInspector]public Vector3 lookDirection;
         private float lookAngle;
         public Transform firePoint;
         private float defaultDistanceRay = 100;
         public LineRenderer lineRenderer;
-        public float abilityCooldown = 20f;
+        public float abilityCooldown = 10f;
+        public float utilityCooldown = 5f;
+        public float pulseDuration = 2f;   
+        public float pulseRadius = 5f;
+        public Material pulseMaterial;
+        public float teleportRange = 10f;
+        public Animator animator;
+
 
         public void AddFrameForce(Vector2 force, bool resetVelocity = false)
         {
@@ -181,14 +189,16 @@ namespace PlayerController
             _airborneCollider.offset = new Vector2(0, _character.Height / 2);
             _airborneCollider.sharedMaterial = _rb.sharedMaterial;
 
+            // Animator
+            animator = GetComponent<Animator>();
+
             SetColliderMode(ColliderMode.Airborne);
         }
 
         #endregion
 
         #region Input
-
-        private FrameInput _frameInput;
+        [HideInInspector]public FrameInput _frameInput;
 
         private void GatherInput()
         {
@@ -406,7 +416,7 @@ namespace PlayerController
 
         private void CalculateAim()
         {
-            lookDirection = (Vector3)_frameInput.Mouse - new Vector3(transform.position.x, transform.position.y);
+            lookDirection = (Vector3)_frameInput.Mouse - new Vector3(firePoint.position.x, firePoint.position.y);
             lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
             firePoint.rotation = Quaternion.Euler(0, 0, lookAngle);
         }
@@ -1003,6 +1013,7 @@ namespace PlayerController
 
         private void Draw2DRay(Vector2 start, Vector2 end)
         {
+
             lineRenderer.enabled = true;
             lineRenderer.SetPosition(0, start);
             lineRenderer.SetPosition(1, end);
@@ -1026,7 +1037,100 @@ namespace PlayerController
             }
 
             lineMaterial.SetColor("_EmissionColor", Color.black);  
-            lineRenderer.enabled = false;  
+            lineRenderer.enabled = false; 
+            lineRenderer.material.SetColor("_EmissionColor", initialColor);
+        }
+        private IEnumerator PulseEffect()
+        {
+            
+            GameObject pulseCircle = new GameObject("PulseCircle");
+            pulseCircle.transform.position = transform.position;
+            SpriteRenderer spriteRenderer = pulseCircle.AddComponent<SpriteRenderer>();
+            spriteRenderer.material = pulseMaterial;
+
+            
+            spriteRenderer.sprite = CreateCircleSprite(pulseRadius);
+            float elapsedTime = 0f;
+
+            while (elapsedTime < pulseDuration)
+            {
+                pulseCircle.transform.position = transform.position;
+                float currentRadius = Mathf.Lerp(0f, pulseRadius, elapsedTime / pulseDuration);
+                pulseCircle.transform.localScale = new Vector3(currentRadius, currentRadius, 1f);
+
+                // Check for collisions with any colliders in the radius
+                Collider2D[] hitColliders = Physics2D.OverlapCircleAll(pulseCircle.transform.position, currentRadius);
+
+                foreach (var hitCollider in hitColliders)
+                {
+                    //Debug.Log("Collided with: " + hitCollider.name);
+                }
+
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            Destroy(pulseCircle);
+        }
+
+        private Sprite CreateCircleSprite(float radius)
+        {
+            int diameter = Mathf.CeilToInt(radius * 2);
+            Texture2D texture = new Texture2D(diameter, diameter);
+            Color[] pixels = new Color[diameter * diameter];
+
+            // Create a circular texture (simple approach)
+            for (int x = 0; x < diameter; x++)
+            {
+                for (int y = 0; y < diameter; y++)
+                {
+                    float distance = Vector2.Distance(new Vector2(x, y), new Vector2(radius, radius));
+                    pixels[x + y * diameter] = distance < radius ? Color.white : new Color(0, 0, 0, 0); // Transparent background
+                }
+            }
+
+            texture.SetPixels(pixels);
+            texture.Apply();
+
+            // Create the sprite from the texture
+            return Sprite.Create(texture, new Rect(0, 0, diameter, diameter), new Vector2(0.5f, 0.5f));
+        }
+
+        public void Teleport()
+        {
+            int layerMask = ~LayerMask.GetMask("Player");
+            Debug.Log("Teleport");
+            Vector2 origin = firePoint.position;
+            Vector2 direction = firePoint.right;
+
+            RaycastHit2D hit = Physics2D.Raycast(origin, direction, teleportRange, layerMask);
+            Vector2 targetPosition;
+
+            if (hit.collider != null)
+            {
+                Debug.Log("TP Hit");
+                targetPosition = hit.point - direction * 0.1f; 
+
+            }
+            else
+            {
+                Debug.Log("TP NoHit");
+                targetPosition = origin + direction * teleportRange;
+            }
+
+            Collider2D overlap = Physics2D.OverlapBox(targetPosition, _collider.bounds.size, 0, layerMask);
+            if (overlap != null)
+            {
+                // Adjust position by moving back along the direction until it's not overlapping
+                float stepBack = 0.1f;
+                while (overlap != null && stepBack < teleportRange)
+                {
+                    targetPosition -= direction * stepBack;
+                    overlap = Physics2D.OverlapBox(targetPosition, _collider.bounds.size, 0);
+                    stepBack += 0.1f;
+                }
+            }
+            
+            transform.position = targetPosition;
         }
         private void DebugAim(Vector3 mousePosition)
         {
@@ -1091,11 +1195,16 @@ namespace PlayerController
                         if (Time.time > abilityCooldown || abilityCooldown == 20f)
                         {
                         ShootBeam();
-                        abilityCooldown = Time.time + 20f;
+                        Debug.Log("Beam");
+                        abilityCooldown = Time.time + 10f;
                         }
                         break;
                     case 2:
-                        
+                        if (Time.time > abilityCooldown || abilityCooldown == 20f)
+                        {
+                            StartCoroutine(PulseEffect());
+                            abilityCooldown = Time.time + 5f;
+                        }
                         break;
                 }
             }
@@ -1110,10 +1219,15 @@ namespace PlayerController
                 switch(Stats.utilityAbilityVariant)
                 {
                     default:
-                        
+
                         break;
-                    case 1:
                         
+                    case 1:
+                        if (Time.time > utilityCooldown || utilityCooldown == 5f)
+                        {
+                            Teleport();
+                            utilityCooldown = Time.time + 7f;
+                        }
                         break;
                     case 2:
                         

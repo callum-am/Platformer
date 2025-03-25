@@ -80,7 +80,17 @@ namespace PlayerController
         [Header("Progression"), Space]
         public float currentExperience = 0f;
         public float totalExperience = 0f;
-    
+        public bool beamUnlocked = false;
+        public bool sphereUnlocked = false;
+        public bool teleportUnlocked = false;
+        public bool shieldUnlocked = false;
+        public bool ricochetUnlocked = false;
+        public bool burstUnlocked = false;
+        public bool healthUpgrade1Unlocked = false;
+        public bool healthUpgrade2Unlocked = false;
+        public bool speedUpgradeUnlocked = false;
+        public bool dashUpgradeUnlocked = false;
+        public float spentPoints = 0;
 
         // Abilities
 
@@ -88,6 +98,8 @@ namespace PlayerController
         public float basicAttackVariant = 0f;
         public float offensiveAbilityVariant = 0f;
         public float utilityAbilityVariant = 0f; 
+
+        
 
         // Moving Platforms
         [Header("Moving Platforms"), Space] public float NegativeYVelocityNegation = 0.2f;
