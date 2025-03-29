@@ -79,8 +79,8 @@ MonoBehaviour:
   sphereUnlocked: 0
   teleportUnlocked: 0
   shieldUnlocked: 0
-  ricochetUnlocked: 0
-  burstUnlocked: 0
+  ricochetUnlocked: 1
+  burstUnlocked: 1
   healthUpgrade1Unlocked: 0
   healthUpgrade2Unlocked: 0
   speedUpgradeUnlocked: 0

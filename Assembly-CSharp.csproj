@@ -59,7 +59,7 @@
     <UnityVersion>2022.3.28f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Users\Cal\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.1.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Users\Cal\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.1.1\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.28f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.28f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
@@ -69,10 +69,13 @@
     <Compile Include="Assets\Controller\Scripts\SkillTreeController.cs" />
     <Compile Include="Assets\Controller\Scripts\SkillTreeUnlocks.cs" />
     <Compile Include="Assets\Controller\Input\PlayerInputActions.cs" />
+    <Compile Include="Assets\Controller\Scripts\Dungeon Generation\Tiling.cs" />
     <Compile Include="Assets\Controller\Scripts\PlayerAbilities.cs" />
     <Compile Include="Assets\Controller\Scripts\ProjectileSpawner.cs" />
     <Compile Include="Assets\Controller\Scripts\PlayerHealth.cs" />
     <Compile Include="Assets\Controller\Scripts\IgnoreCollisions.cs" />
+    <Compile Include="Assets\Controller\Scripts\BombEnemy.cs" />
+    <Compile Include="Assets\Controller\Scripts\Dungeon Generation\Generation.cs" />
     <Compile Include="Assets\Controller\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Controller\Scripts\PlayerAnimations.cs" />
     <Compile Include="Assets\Controller\Scripts\PhysicsSimulator.cs" />
@@ -83,9 +86,11 @@
     <Compile Include="Assets\Controller\Scripts\Bolt.cs" />
     <Compile Include="Assets\Controller\Scripts\SkillStats.cs" />
     <Compile Include="Assets\Controller\Scripts\Tooltip.cs" />
+    <Compile Include="Assets\Controller\Scripts\GolemEnemyAI.cs" />
     <Compile Include="Assets\Controller\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Controller\Scripts\StartMenuController.cs" />
     <Compile Include="Assets\Controller\Scripts\EyeBounce.cs" />
+    <Compile Include="Assets\Controller\Scripts\Dungeon Generation\Grid.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
