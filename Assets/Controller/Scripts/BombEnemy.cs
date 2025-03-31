@@ -43,7 +43,6 @@ public class BombEnemy : MonoBehaviour
 
         if (target == null)
         {
-            Debug.Log("No target found");
             return;
         }
 
@@ -77,7 +76,6 @@ public class BombEnemy : MonoBehaviour
                 path.Add(targetPos);
                 Debug.Log("Adding target to path"+ targetPos);
             }
-            return;
         }
 
         //If a path exists (target has crossed line of sight), and the distance between the last waypoint and the target is greater than 1, add the target to the path
@@ -90,7 +88,7 @@ public class BombEnemy : MonoBehaviour
         }
 
         //If current position is within 0.5 units of the target position, remove the target from the path
-        if (Vector2.Distance(transform.position, path[0]) < 0.5f)
+        if (Vector2.Distance(transform.position, path[0]) < 1f)
         {
             //If the enemy is within 0.5 units of the first waypoint, remove the waypoint
             path.RemoveAt(0);
@@ -108,16 +106,16 @@ public class BombEnemy : MonoBehaviour
         {
             //Slow down if no target
             rb.drag = 1f;
-            return;
         }
         else{
         //var pathDir = Quaternion.LookRotation(Vector3.forward, path[0] - transform.position).normalized;
         //Rotate towards target
         rb.drag = 0f;
         rb.MoveRotation(Quaternion.LookRotation(Vector3.forward, path[0] - transform.position));
+        rb.AddForce(transform.up * speed);
         }
         //Apply Force
-        rb.AddForce(transform.up * speed);
+        
         //Debug.Log("Attempting to move to target: " + path[0]);
 
         //Prevent overspeeding
