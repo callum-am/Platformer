@@ -295,7 +295,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebd486e21e99b4c4081306630e4f0cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: 894dfe33661263b42a8e1490d64c0424, type: 2}
   Beam: {fileID: 0}
   Sphere: {fileID: 0}
   Shield: {fileID: 0}
@@ -309,3 +308,5 @@ MonoBehaviour:
   isCooldown2: 0
   isCooldownDash: 0
   player: {fileID: 0}
+  Locked1: {fileID: 0}
+  Locked2: {fileID: 0}

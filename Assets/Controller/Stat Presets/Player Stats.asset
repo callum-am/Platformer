@@ -87,7 +87,7 @@ MonoBehaviour:
   dashUpgradeUnlocked: 0
   spentPoints: 0
   basicAttackVariant: 0
-  offensiveAbilityVariant: 0
+  offensiveAbilityVariant: 2
   utilityAbilityVariant: 0
   NegativeYVelocityNegation: 0.2
   ExternalVelocityDecayRate: 0.5

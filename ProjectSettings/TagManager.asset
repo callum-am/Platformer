@@ -5,11 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - SolidTerrain
+  - Enemy
+  - HealthBar
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Boss
   - Water
   - UI
   - Enemy
@@ -18,8 +20,8 @@ TagManager:
   - Ladders
   - PlayerProjectile
   - EnemyProjectile
-  - 
-  - 
+  - SunSprite
+  - NewEnemyProjectile
   - 
   - 
   - 

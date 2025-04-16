@@ -9,13 +9,13 @@ public class DungeonGenerator : MonoBehaviour
     public List<Room> roomPrefabs;
     public int numberOfRooms = 10;
     public float roomSize = 16f;
-    public int seed = 0; // Add this property to set the seed value
+    public int seed; 
 
     private Dictionary<Vector2, Room> placedRooms = new Dictionary<Vector2, Room>();
 
     void Start()
     {
-        GenerateDungeon();
+        GenerateDungeon(seed);
     }
 
     private Room GetRightProgressingRoom(Room.Direction previousExit)
@@ -34,9 +34,9 @@ public class DungeonGenerator : MonoBehaviour
         return compatibleRooms[Random.Range(0, compatibleRooms.Count)];
     }
 
-    void GenerateDungeon()
+    void GenerateDungeon(int seed)
     {
-        Random.InitState(seed); // Initialize the random number generator with the seed
+        Random.InitState(seed);
         placedRooms.Clear();
 
         // Place start room (always exits right)
