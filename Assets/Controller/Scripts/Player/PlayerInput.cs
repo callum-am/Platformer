@@ -31,6 +31,7 @@ namespace PlayerController
                 JumpDown = _jump.WasPressedThisFrame(),
                 JumpHeld = _jump.IsPressed(),
                 DashDown = _dash.WasPressedThisFrame(),
+                DashTrigger = _dash.IsPressed(),
                 AttackDown = _attack.IsPressed(),
                 AbilityDown = _ability.IsPressed(),
                 UtilityDown = _utility.IsPressed(),
@@ -47,6 +48,7 @@ namespace PlayerController
         public bool JumpDown;
         public bool JumpHeld;
         public bool DashDown;
+        public bool DashTrigger;
         public bool AttackDown;
         public bool AbilityDown;
         public bool UtilityDown;

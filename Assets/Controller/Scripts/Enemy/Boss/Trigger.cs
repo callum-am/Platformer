@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Trigger : MonoBehaviour
 {
@@ -10,14 +11,31 @@ public class Trigger : MonoBehaviour
     public BossController boss;
     
     private Camera mainCamera;
+    private GameObject bossOverlay;    // Changed to private
+    private GameObject bossHealthBar;  // Changed to private
     private bool isTransitioning = false;
     private float initialCameraSize;
-
 
     void Start()
     {
         mainCamera = Camera.main;
         initialCameraSize = mainCamera.orthographicSize;
+
+        // Find UI elements in main camera's canvas
+        Canvas mainCanvas = mainCamera.GetComponentInChildren<Canvas>();
+        if (mainCanvas != null)
+        {
+            bossOverlay = mainCanvas.transform.Find("BossOverlay")?.gameObject;
+            bossHealthBar = mainCanvas.transform.Find("BossHealthBar")?.gameObject;
+            
+            // Ensure UI elements are initially hidden
+            if (bossOverlay) bossOverlay.SetActive(false);
+            if (bossHealthBar) bossHealthBar.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("No canvas found in main camera!");
+        }
     }
 
     void Update()
@@ -47,6 +65,11 @@ public class Trigger : MonoBehaviour
         {
             isTransitioning = true;
             boss.StartBossFight();
+            
+            // Activate UI elements
+            if (bossOverlay) bossOverlay.SetActive(true);
+            if (bossHealthBar) bossHealthBar.SetActive(true);
+            boss.bossHealthBar = bossHealthBar.GetComponent<Image>();
         }
     }
 }

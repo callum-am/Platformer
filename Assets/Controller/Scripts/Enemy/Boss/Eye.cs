@@ -12,6 +12,7 @@ public class Eye : MonoBehaviour
     public enum FiringMode { Straight, Spin }
     private bool isFiring = false;
     public LineRenderer lineRenderer;
+    public LineRenderer cosmeticLineRenderer;
     public float laserDuration = 5f;
     public float laserDamage = 30f;
     public Transform firePoint;
@@ -19,20 +20,27 @@ public class Eye : MonoBehaviour
     private Vector2 currentLaserEnd;
     private bool isLaserActive = false;
     private Material lineMaterial;
+    private Material cosmeticLineMaterial;
     private Color initialLaserColor;
+    private Color initialCosmeticLaserColor;
 
     void Start()
     {
-        localDefaultRotation = transform.localRotation; // Store local rotation instead of world rotation
+        localDefaultRotation = transform.localRotation; 
         target = GameObject.FindGameObjectWithTag("Player")?.transform;
-
+        
         if (projectileSpawner == null)
         {
             projectileSpawner = GetComponent<ProjectileSpawner>();
         }
 
         lineMaterial = lineRenderer.material;
+        cosmeticLineMaterial = cosmeticLineRenderer.material;
         initialLaserColor = lineMaterial.GetColor("_EmissionColor");
+        initialCosmeticLaserColor = cosmeticLineMaterial.GetColor("_EmissionColor");
+        
+
+        cosmeticLineRenderer.enabled = false;
     }
 
     void Update()
@@ -41,20 +49,23 @@ public class Eye : MonoBehaviour
 
         if (isTracking)
         {
-            Vector3 direction = target.position - transform.position;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
+ 
+            Vector3 targetLocalPos = transform.parent.InverseTransformPoint(target.position);
+            Vector3 eyeLocalPos = transform.parent.InverseTransformPoint(transform.position);
+            Vector3 localDirection = (targetLocalPos - eyeLocalPos).normalized;
+
+
+            float angle = Mathf.Atan2(localDirection.y, localDirection.x) * Mathf.Rad2Deg;
             
-            // Use world rotation when tracking player
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation, 
-                targetRotation, 
+
+            transform.localRotation = Quaternion.Slerp(
+                transform.localRotation,
+                Quaternion.Euler(0, 0, angle),
                 rotationSpeed * Time.deltaTime
             );
         }
         else
         {
-            // Use local rotation when not tracking to maintain position relative to wheel
             transform.localRotation = Quaternion.Slerp(
                 transform.localRotation,
                 localDefaultRotation,
@@ -115,13 +126,34 @@ public class Eye : MonoBehaviour
 
     public void FireLaser()
     {
-        if (isLaserActive) return; // Prevent multiple concurrent lasers
+        if (isLaserActive) return;
         
         isLaserActive = true;
         lineRenderer.enabled = true;
+        cosmeticLineRenderer.enabled = false; 
         lineMaterial.SetColor("_EmissionColor", initialLaserColor);
         StartCoroutine(LaserActiveCheck());
         StartCoroutine(PersistentLaserEffect(laserDuration));
+    }
+
+    public void FireCosmeticLaser(Vector3 targetPosition, float intensity = 1f)
+    {
+        
+        if (isLaserActive) return;
+
+        cosmeticLineRenderer.enabled = true;
+        cosmeticLineRenderer.SetPosition(0, firePoint.position);
+        cosmeticLineRenderer.SetPosition(1, targetPosition);
+        cosmeticLineMaterial.SetColor("_EmissionColor", initialCosmeticLaserColor * intensity);
+    }
+
+    public void StopLaser()
+    {
+        lineRenderer.enabled = false;
+        cosmeticLineRenderer.enabled = false;
+        isLaserActive = false;
+        StopCoroutine(LaserActiveCheck());
+        StopCoroutine(PersistentLaserEffect(laserDuration));
     }
 
     private IEnumerator LaserActiveCheck()
@@ -129,7 +161,7 @@ public class Eye : MonoBehaviour
         while (isLaserActive)
         {
             CheckLaserCollision();
-            yield return new WaitForFixedUpdate(); // Use FixedUpdate for more stable physics checks
+            yield return new WaitForFixedUpdate(); 
         }
     }
 
@@ -175,6 +207,7 @@ public class Eye : MonoBehaviour
     private void Draw2DRay(Vector2 start, Vector2 end)
     {
         lineRenderer.enabled = true;
+        cosmeticLineRenderer.enabled = false; 
         lineRenderer.SetPosition(0, start);
         lineRenderer.SetPosition(1, end);
     }
@@ -182,10 +215,10 @@ public class Eye : MonoBehaviour
     private IEnumerator PersistentLaserEffect(float duration)
     {
         // Hold phase
-        yield return new WaitForSeconds(duration * 0.8f); // Hold for 80% of duration
+        yield return new WaitForSeconds(duration * 0.8f); 
 
         // Fade phase
-        float fadeDuration = duration * 0.2f; // Fade for last 20% of duration
+        float fadeDuration = duration * 0.2f; 
         float elapsedTime = 0f;
 
         while (elapsedTime < fadeDuration)

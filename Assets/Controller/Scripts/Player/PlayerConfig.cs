@@ -33,6 +33,10 @@ public class PlayerConfig
     public float offensiveAbilityVariant;
     public float utilityAbilityVariant;
 
+    //Values for run for run
+    public int seed;
+    public int length;
+
     private static string SavePath => Path.Combine(Application.persistentDataPath, "playerconfig.json");
 
     // Constructor to initialize default values
@@ -80,6 +84,9 @@ public class PlayerConfig
         speedUpgradeUnlocked = false;
         dashUpgradeUnlocked = false;
         maxHealth = 100f;
+        basicAttackVariant = 0f;
+        offensiveAbilityVariant = 0f;
+        utilityAbilityVariant = 0f;
 
         SaveToFile();
     }

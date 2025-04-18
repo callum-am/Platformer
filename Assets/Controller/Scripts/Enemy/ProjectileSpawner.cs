@@ -22,11 +22,12 @@ public class ProjectileSpawner : MonoBehaviour
     private float timeSinceLastSpawn = 0f;
     private float rotDirection = 1f;
     private bool isActive = false;
+    private Transform spawnRotation;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        spawnRotation = transform;
     }
 
     // Update is called once per frame
@@ -89,6 +90,7 @@ public class ProjectileSpawner : MonoBehaviour
     public void StopFiring()
     {
         isActive = false;
+        transform.rotation = spawnRotation.rotation; // Reset rotation
     }
 
     public void SetSpawnRate(float rate)

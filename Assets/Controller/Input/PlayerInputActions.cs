@@ -219,17 +219,6 @@ namespace PlayerController
                 },
                 {
                     ""name"": """",
-                    ""id"": ""9d168e6e-7713-4ae3-b372-87fc73a539cc"",
-                    ""path"": ""<Keyboard>/c"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""19f4a3a7-3e3d-4e43-bccb-dbbfe723a1ae"",
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
@@ -253,7 +242,7 @@ namespace PlayerController
                 {
                     ""name"": """",
                     ""id"": ""087be7d0-bbe5-437a-b100-34ab76f1b45a"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -319,7 +308,7 @@ namespace PlayerController
                 {
                     ""name"": """",
                     ""id"": ""13f43569-8981-4c2d-83eb-cbf0c247c466"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""path"": ""<Keyboard>/v"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -330,7 +319,7 @@ namespace PlayerController
                 {
                     ""name"": """",
                     ""id"": ""9cad65e2-f97e-4d60-b28c-4c58220a6b48"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/c"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

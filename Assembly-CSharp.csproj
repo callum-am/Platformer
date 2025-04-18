@@ -89,13 +89,12 @@
     <Compile Include="Assets\Controller\Scripts\UI Controllers\SkillTreeController.cs" />
     <Compile Include="Assets\Controller\Scripts\Enemy\LaserTurret.cs" />
     <Compile Include="Assets\Controller\Scripts\Enemy\BulletTurret.cs" />
-    <Compile Include="Assets\Controller\Scripts\Enemy\GolemEnemyAI.cs" />
     <Compile Include="Assets\Controller\Scripts\UI Controllers\SkillTreeUnlocks.cs" />
     <Compile Include="Assets\Controller\Scripts\Player\CameraFollow.cs" />
     <Compile Include="Assets\Controller\Scripts\Enemy\Damage.cs" />
-    <Compile Include="Assets\Controller\Scripts\Enemy\VerticalLaserTurret.cs" />
     <Compile Include="Assets\Controller\Scripts\Player\LightBall.cs" />
     <Compile Include="Assets\Controller\Scripts\Dungeon Generation\Room.cs" />
+    <Compile Include="Assets\Controller\Scripts\Enemy\Boss\Skybox.cs" />
     <Compile Include="Assets\Controller\Scripts\Enemy\Boss\BossController.cs" />
     <Compile Include="Assets\Controller\Scripts\Player\PhysicsSimulator.cs" />
     <Compile Include="Assets\Controller\Scripts\Player\PlayerAnimations.cs" />
@@ -103,6 +102,7 @@
     <Compile Include="Assets\Controller\Scripts\Enemy\Boss\Eye.cs" />
     <Compile Include="Assets\Controller\Scripts\Player\PlayerInput.cs" />
     <Compile Include="Assets\Controller\Scripts\Misc_\DeathScreen.cs" />
+    <Compile Include="Assets\Controller\Scripts\UI Controllers\HealingEncounter.cs" />
     <Compile Include="Assets\Controller\Scripts\Enemy\Boss\Trigger.cs" />
     <Compile Include="Assets\Controller\Scripts\UI Controllers\StartMenuController.cs" />
     <Compile Include="Assets\Controller\Scripts\Dungeon Generation\DungeonGenerator.cs" />

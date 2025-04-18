@@ -27,25 +27,20 @@ public class SkillTreeController : MonoBehaviour
     void Start()
     {
         Cursor.visible = true;
-        gameObject.SetActive(false);
     }
 
     void Update()
     {
-        Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5);
-        transform.position = new Vector3 (Camera.ScreenToWorldPoint(mousePos).x, Camera.ScreenToWorldPoint(mousePos).y, 5);
-    }
 
+    }
     public void ShowTooltip(string title, string description, string cost)
     {
         AbilityTitle.text = title;
         AbilityDescription.text = description;
         AbilityCost.text = cost;
-        gameObject.SetActive(true);
     }
     public void HideTooltip()
     {
-        gameObject.SetActive(false);
         AbilityTitle.text = "";
         AbilityDescription.text = "";
         AbilityCost.text = "";

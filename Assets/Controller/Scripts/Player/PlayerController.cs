@@ -990,7 +990,8 @@ namespace PlayerController
 
         private void ShootBeam()
         {
-            int layerMask = ~LayerMask.GetMask("Player");
+            int layerMask = ~LayerMask.GetMask("Player")
+                | ~LayerMask.GetMask("SunSprite");
 
             RaycastHit2D hit = Physics2D.Raycast(firePoint.position, firePoint.right, defaultDistanceRay, layerMask);
 

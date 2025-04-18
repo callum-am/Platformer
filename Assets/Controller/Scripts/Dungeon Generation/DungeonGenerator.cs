@@ -7,14 +7,16 @@ public class DungeonGenerator : MonoBehaviour
     public Room finalRoomPrefab;
     public Room shopRoomPrefab;
     public List<Room> roomPrefabs;
-    public int numberOfRooms = 10;
+    private int numberOfRooms;
     public float roomSize = 16f;
-    public int seed; 
+    private int seed; 
 
     private Dictionary<Vector2, Room> placedRooms = new Dictionary<Vector2, Room>();
 
     void Start()
     {
+        seed = PlayerConfigManager.Instance.Config.seed;
+        numberOfRooms = PlayerConfigManager.Instance.Config.length;
         GenerateDungeon(seed);
     }
 
@@ -36,6 +38,9 @@ public class DungeonGenerator : MonoBehaviour
 
     void GenerateDungeon(int seed)
     {
+        Debug.Log($"Generating dungeon with seed: {seed} and length: {numberOfRooms}");
+        Debug.Log(PlayerConfigManager.Instance.Config.seed);
+        Debug.Log(PlayerConfigManager.Instance.Config.length);
         Random.InitState(seed);
         placedRooms.Clear();
 

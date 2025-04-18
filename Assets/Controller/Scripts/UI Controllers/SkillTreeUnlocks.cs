@@ -24,6 +24,12 @@ public class SkillTreeUnlocks : MonoBehaviour
     public Image speedImage;
     public Image dashImage;
 
+    void FixedUpdate()
+    {
+        var config = PlayerConfigManager.Instance.Config;
+        AvailablePoints.text = "Available Points: " + config.currentExperience.ToString();
+        TotalPoints.text = "Total Points: " + config.totalExperience.ToString();
+    }
     void Update()
     {
         
@@ -135,6 +141,20 @@ public class SkillTreeUnlocks : MonoBehaviour
         {
             Debug.Log("Not enough points");
         }
+    }
+
+    public void ResetEXP()
+    {
+        var config = PlayerConfigManager.Instance.Config;
+        config.ResetConfig();
+        config.SaveToFile();
+    }
+
+    public void Add1000()
+    {
+        var config = PlayerConfigManager.Instance.Config;
+        config.AddExperience(1000);
+        config.SaveToFile();
     }
 
     public void UnlockSphere()
@@ -251,15 +271,16 @@ public class SkillTreeUnlocks : MonoBehaviour
 
     public void HealthUpgrade2()
     {
+        Debug.Log("Health Upgrade 2");
         var config = PlayerConfigManager.Instance.Config;
         if (config.healthUpgrade2Unlocked)
         {
             return;
-        }else if(!config.healthUpgrade1Unlocked && config.currentExperience >= 750)
+        }else if(!config.healthUpgrade2Unlocked && config.currentExperience >= 750)
         {
             config.healthUpgrade2Unlocked = true;
             config.maxHealth += 25f;
-        }else if (!config.healthUpgrade1Unlocked && config.currentExperience <= 750)
+        }else if (!config.healthUpgrade2Unlocked && config.currentExperience <= 750)
         {
             Debug.Log("Not Enough Points");
         }

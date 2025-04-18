@@ -178,7 +178,7 @@ public class CentralEye : MonoBehaviour
         
         while (elapsed < laserDuration)
         {
-            RaycastHit2D hit = Physics2D.Raycast(firePoint.position, Vector2.down, heightAbovePlayer * 2f, layerMask);
+            RaycastHit2D hit = Physics2D.Raycast(firePoint.position, Vector2.down, heightAbovePlayer * 4f, layerMask);
             
             Vector2 laserEnd = hit.collider != null ? hit.point : (Vector2)firePoint.position + Vector2.down * heightAbovePlayer * 2f;
             

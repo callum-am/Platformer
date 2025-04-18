@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class BossController : MonoBehaviour
 {
@@ -25,10 +26,11 @@ public class BossController : MonoBehaviour
     public GameObject BombEnemyPrefab;
     public Transform BoltPoint1;
     public Transform BoltPoint2;
+    public Image bossHealthBar;
 
     void Start()
     {
-
+        
     }
 
     void Update()
@@ -36,6 +38,7 @@ public class BossController : MonoBehaviour
         if (isBossFightActive)
         {
             UpdatePhase();
+            bossHealthBar.fillAmount = Mathf.Clamp(selfHealth.health / selfHealth.maxHealth, 0, 1);
         }
     }
 
@@ -56,16 +59,32 @@ public class BossController : MonoBehaviour
     {
         float healthPercentage = (selfHealth.health / selfHealth.maxHealth) * 100f;
 
-        if (healthPercentage <= phase4Threshold) currentPhase = BossPhase.Phase4;
+        if (healthPercentage <= phase4Threshold) {currentPhase = BossPhase.Phase4;
+                                                  wheel.StartChasing();}
         else if (healthPercentage <= phase3Threshold) currentPhase = BossPhase.Phase3;
         else if (healthPercentage <= phase2Threshold) currentPhase = BossPhase.Phase2;
         else currentPhase = BossPhase.Phase1;
+
+        if (selfHealth.health <= 0)
+        {
+            var config = PlayerConfigManager.Instance.Config;
+            config.currentRunExperience += 500;
+            selfHealth.health = 0;
+            isBossFightActive = false;
+            UnityEngine.SceneManagement.SceneManager.LoadScene("EndScreen");
+        }
     }
 
     private IEnumerator BehaviourLoop()
     {
         while (true)
         {
+            if (wheel.IsFinalSequenceActive())
+            {
+                StopAllCoroutines();
+                yield break;
+            }
+
             if (!isExecutingBehaviour)
             {
                 isExecutingBehaviour = true;
@@ -112,10 +131,12 @@ public class BossController : MonoBehaviour
     private IEnumerator Phase1Behaviour1()
     {
         wheel.SetRotationSpeed(30f);
-        wheel.SetAllEyesSpawnRate(1f);
-        wheel.SetAllEyesFiring(Eye.FiringMode.Spin);
-        yield return new WaitForSeconds(2f);
+        wheel.SetAllEyesSpawnRate(0.5f);
         wheel.SetAllEyesFiring(Eye.FiringMode.Straight);
+        yield return new WaitForSeconds(2f);
+        wheel.StopAllEyesFiring();
+        wheel.SetAllEyesFiring(Eye.FiringMode.Straight);
+        wheel.SetAllEyesSpawnRate(0.25f);
         wheel.StartPlayerTracking();
         yield return new WaitForSeconds(8f);
         wheel.StopPlayerTracking();
@@ -126,9 +147,8 @@ public class BossController : MonoBehaviour
 
     private IEnumerator Phase1Behaviour2()
     {
-        Instantiate(BombEnemyPrefab, BoltPoint2.position, Quaternion.identity);
-        wheel.SetRotationSpeed(50f);
-        wheel.SetAllEyesSpawnRate(2f);
+        wheel.SetRotationSpeed(60f);
+        wheel.SetAllEyesSpawnRate(0.5f);
         wheel.SetAllEyesFiring(Eye.FiringMode.Straight);
         wheel.StartPlayerTracking();
         yield return new WaitForSeconds(10f);
@@ -139,7 +159,7 @@ public class BossController : MonoBehaviour
 
     private IEnumerator Phase1Behaviour3()
     {
-        wheel.SetAllEyesFiring(Eye.FiringMode.Spin);
+        wheel.SetAllEyesFiring(Eye.FiringMode.Straight);
         wheel.SetAllEyesSpawnRate(0.5f);
         yield return new WaitForSeconds(5f);
         wheel.StopAllEyesFiring();
@@ -167,7 +187,7 @@ public class BossController : MonoBehaviour
     private IEnumerator Phase2Behaviour1()
     {
         wheel.SetRotationSpeed(10f);
-        wheel.SetAllEyesSpawnRate(1f);
+        wheel.SetAllEyesSpawnRate(0.25f);
         wheel.SetAllEyesFiring(Eye.FiringMode.Straight);
         wheel.StartPlayerTracking();
         centralEye.LaserAttack();
@@ -175,22 +195,34 @@ public class BossController : MonoBehaviour
         wheel.StopPlayerTracking();
         wheel.StopAllEyesFiring();
         wheel.SetAllEyesSpawnRate(2f);
+        isExecutingBehaviour = false;
     }
 
     private IEnumerator Phase2Behaviour2()
     {
         wheel.FireAllEyeLasers();
+        wheel.StartPlayerTracking();
         yield return new WaitForSeconds(3f);
         wheel.SetAllEyesSpawnRate(0.25f);
-        wheel.SetAllEyesFiring(Eye.FiringMode.Spin);
+        wheel.SetAllEyesFiring(Eye.FiringMode.Straight);
         yield return new WaitForSeconds(2f);
         wheel.StopAllEyesFiring();
         wheel.SetAllEyesSpawnRate(2f);
+        isExecutingBehaviour = false;
     }
     private IEnumerator Phase2Behaviour3()
     {
-        
-        yield return null;
+        centralEye.BoltAttack(10);
+        yield return new WaitForSeconds(2f);
+        wheel.SetRotationSpeed(20f);
+        wheel.SetAllEyesSpawnRate(1f);
+        wheel.SetAllEyesFiring(Eye.FiringMode.Straight);
+        wheel.StartPlayerTracking();
+        yield return new WaitForSeconds(5f);
+        wheel.StopPlayerTracking();
+        wheel.StopAllEyesFiring();
+        wheel.SetAllEyesSpawnRate(2f);
+        isExecutingBehaviour = false;
     }
 
     //PHASE 3 BEHAVIOURS
@@ -212,19 +244,36 @@ public class BossController : MonoBehaviour
     }
     private IEnumerator Phase3Behaviour1()
     {
-        
-        yield return null;
+        wheel.SetRotationSpeed(30f);
+        wheel.StartPlayerTracking();
+        wheel.FireAllEyeLasers();
+        centralEye.LaserAttack();
+        yield return new WaitForSeconds(3f);
+        wheel.StopAllEyesFiring();
+        wheel.StopPlayerTracking();
+        isExecutingBehaviour = false;
     }
-
     private IEnumerator Phase3Behaviour2()
     {
-        
-        yield return null;
+        wheel.StopPlayerTracking(); 
+        wheel.FireAllEyeLasers();
+        centralEye.BoltAttack(16);
+        yield return new WaitForSeconds(3f); 
+        isExecutingBehaviour = false;
     }
     private IEnumerator Phase3Behaviour3()
     {
-        
-        yield return null;
+        wheel.StopAllEyesFiring();
+        wheel.SetRotationSpeed(50f);
+        wheel.SetAllEyesSpawnRate(0.1f);
+        wheel.SetAllEyesFiring(Eye.FiringMode.Straight);
+        wheel.StartPlayerTracking();
+        yield return new WaitForSeconds(3f);
+        wheel.SetRotationSpeed(-50f);
+        yield return new WaitForSeconds(3f);
+        wheel.SetRotationSpeed(50f);
+        yield return new WaitForSeconds(3f);
+        isExecutingBehaviour = false;
     }
 
     // PHASE 4 BEHAVIOURS
@@ -247,19 +296,32 @@ public class BossController : MonoBehaviour
 
     private IEnumerator Phase4Behaviour1()
     {
-        
-        yield return null;
+        wheel.SetRotationSpeed(10f);
+        wheel.FireAllEyeLasers();
+        wheel.StartChasing();
+        yield return new WaitForSeconds(3f);
+        wheel.StopPlayerTracking();
+        isExecutingBehaviour = false;
     }
 
     private IEnumerator Phase4Behaviour2()
     {
-        
-        yield return null;
+        centralEye.BoltAttack(16);
+        yield return new WaitForSeconds(2f);
+        wheel.SetAllEyesSpawnRate(0.25f);
+        wheel.SetAllEyesFiring(Eye.FiringMode.Straight);
+        wheel.StartPlayerTracking();
+        yield return new WaitForSeconds(5f);
+        wheel.StopPlayerTracking();
+        wheel.StopAllEyesFiring();
+        isExecutingBehaviour = false;
     }
     private IEnumerator Phase4Behaviour3()
     {
-        
-        yield return null;
+        wheel.FireAllEyeLasers();
+        centralEye.LaserAttack();
+        yield return new WaitForSeconds(3f);
+        isExecutingBehaviour = false;
     }
 
 }
