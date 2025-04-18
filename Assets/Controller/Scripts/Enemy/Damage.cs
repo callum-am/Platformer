@@ -22,7 +22,6 @@ public class Damage : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             collision.gameObject.GetComponent<PlayerHealth>().health -= damage;
-            Destroy(this.gameObject);
         }   
     }
 }
